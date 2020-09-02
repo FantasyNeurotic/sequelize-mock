@@ -190,6 +190,58 @@ describe('Data Types', function () {
 		});
 		
 	});
+
+	describe('.SMALLINT', function () {
+		
+		it('should expose the property', function () {
+			MockObj.should.have.property('SMALLINT');
+			MockObj.SMALLINT.key.should.equal('SMALLINT');
+			var verify = new MockObj.SMALLINT();
+			verify.toSql().should.equal('SMALLINT');
+			verify.should.have.property('UNSIGNED');
+			verify.should.have.property('ZEROFILL');
+		});
+		
+		it('should cast to a SMALLINT if called without new', function () {
+			var verify = MockObj.SMALLINT();
+			verify.should.be.instanceof(MockObj.SMALLINT);
+		});
+		
+		it('should record length option', function () {
+			var verify = new MockObj.SMALLINT(123);
+			verify.options.length.should.equal(123);
+		});
+		
+		it('should accept options as object instead of arguments', function () {
+			var verify = new MockObj.SMALLINT({ length: 123 });
+			verify.options.length.should.equal(123);
+		});
+
+		it('should throw the error when  greater than 255', function () {
+			try {
+				new MockObj.SMALLINT({ length: 256 });
+			} catch(e) {
+				e.message.should.equal('Should less than 255')
+			}
+		});
+		
+		it('should return string NaN for stringify function', function () {
+			var verify = new MockObj.SMALLINT();
+			verify.stringify(NaN).should.equal("'NaN'");
+		});
+		
+		it('should return string Infinity for stringify function', function () {
+			var verify = new MockObj.SMALLINT();
+			verify.stringify(Infinity).should.equal("'Infinity'");
+			verify.stringify(-Infinity).should.equal("'-Infinity'");
+		});
+		
+		it('should return stringified number for stringify function', function () {
+			var verify = new MockObj.SMALLINT();
+			verify.stringify(123).should.be.exactly("123");
+		});
+		
+	});
 	
 	describe('.FLOAT', function () {
 		

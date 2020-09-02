@@ -162,6 +162,24 @@ var INTEGER = NUMBER.inherits(function(length) {
 });
 INTEGER.prototype.key = INTEGER.key = 'INTEGER';
 
+/*
+* @property SMALLINT
+*/
+var SMALLINT = NUMBER.inherits(function(length) {
+ if (!(this instanceof SMALLINT)) {
+	 return new SMALLINT(length);
+ }
+
+ const result = typeof length === 'object' && length ? length : {
+	length: length,
+}
+if (Number(result.length) > 255) {
+	throw new Error('Should less than 255')
+}
+ NUMBER.call(this, result);
+});
+SMALLINT.prototype.key = SMALLINT.key = 'SMALLINT';
+
 /**
  * Mock big integer data type
  *
@@ -524,6 +542,7 @@ module.exports = function (Sequelize) {
 	Sequelize.TEXT      = TEXT;
 	Sequelize.INTEGER   = INTEGER;
 	Sequelize.BIGINT    = BIGINT;
+	Sequelize.SMALLINT  = SMALLINT;
 	Sequelize.FLOAT     = FLOAT;
 	Sequelize.REAL      = REAL;
 	Sequelize.DOUBLE    = DOUBLE;
