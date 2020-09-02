@@ -358,6 +358,30 @@ fakeModel.prototype.findById = function (id) {
 	});
 };
 
+
+/**
+ * Executes a mock query to find an instance with the given ID value. Without any other
+ * configuration, the default behavior when no queueud query result is present is to
+ * create a new Instance with the given id and wrap it in a promise.
+ * 
+ * To turn off this behavior, the `$autoQueryFallback` option on the model should be set
+ * to `false`.
+ * 
+ * @instance
+ * @param {Integer} id ID of the instance
+ * @return {Promise<Instance>} Promise that resolves with an instance with the given ID
+ **/
+fakeModel.prototype.findByPk = function (id) {
+	var self = this;
+	
+	return this.$query({
+		query: "findByPk",
+		queryOptions: arguments,
+		fallbackFn: !this.options.autoQueryFallback ? null : function () {
+			return Promise.resolve( self.build({ id: id }) );
+		},
+	});
+};
 /**
  * Executes a mock query to find an instance with the given infomation. Without any other
  * configuration, the default behavior when no queueud query result is present is to
